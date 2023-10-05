@@ -1,0 +1,8 @@
+docker build -t test_setup_container .
+docker network create bsp_setup_net
+
+docker run -d --name mqtt_broker --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro --network bsp_setup_net -p 42:22 -p 1883:1883 -p 8883:8883 test_setup_container
+docker run -d --name scba_simulator --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro --network bsp_setup_net -p 23:22 -p 8094:8094 -p 8095:8095 -p 8090:8090 test_setup_container
+docker run -d --name scba_control --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro --network bsp_setup_net -p 24:22 test_setup_container
+docker run -d --name influx --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro --network bsp_setup_net -p 25:22 -p 8086:8086 -p 3000:3000 test_setup_container
+#docker run -d --name grafana --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro --network bsp_setup_net -p 26:22 test_setup_container
